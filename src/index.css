@@ -1,0 +1,86 @@
+.node-block {
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 1rem;
+}
+
+.node-block-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
+  padding: 1rem;
+  cursor: move;
+}
+
+.node-block-header-title {
+  text-transform: uppercase;
+  margin-right: 2rem;
+}
+
+.node-block-header-meta {
+  opacity: .7;
+  font-size: .9rem;
+}
+
+.node-block-body {
+  padding: 2rem 1rem;
+  border-top: 2px teal solid;
+}
+
+.node-block-footer {
+  background: #e8e8e8;
+  padding: 1rem;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+}
+
+.node-block-footer-link {
+  text-decoration: none;
+  padding: .4rem .7rem;
+  outline: none;
+  border: none;
+  background: teal;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  -webkit-transition: background 120ms ease-out;
+  transition: background 120ms ease-out;
+}
+
+.node-block-footer-link:hover {
+  background: #00b3b3;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 0;
+}
+
+.container {
+  width: 75%;
+  margin: auto;
+}
+
+#dashboard {
+  width: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 2rem;
+}
+/*# sourceMappingURL=index.css.map */
