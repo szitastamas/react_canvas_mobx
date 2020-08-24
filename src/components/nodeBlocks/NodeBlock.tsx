@@ -4,19 +4,26 @@ import rootStore from "../../store/rootStore";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
-const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
+interface IProps {
+  block: INodeBlock;
+  recalculateDashboardSize: () => void
+}
+const NodeBlock: React.FC<IProps> = ({
+  block,
+  recalculateDashboardSize
+}) => {
   const {
-    nodeStore: { getReferencesCount, updateBlockPosition },
+    nodeStore: { getReferencesCount, updateBlockPosition, setDeepestNodeBlock, setRightestNodeBlock },
   } = useContext(rootStore);
 
   const [position, setPosition] = useState({
     x: block.position.x,
-    y: block.position.y
+    y: block.position.y,
   });
 
   const [mouseRel, setMouseRel] = useState({
     x: 0,
-    y: 0
+    y: 0,
   });
 
   const [isDragging, setIsDragging] = useState(false);
@@ -24,52 +31,66 @@ const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
   const blockRef = useRef(null);
 
   useEffect(() => {
-    setElementPosition()
-  }, [])
+    setElementPosition();
+  }, []);
 
-  const handleMouseDown = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleMouseDown = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     const draggedElement = (blockRef.current as unknown) as HTMLElement;
 
     setMouseRel({
       x: event.clientX - draggedElement.offsetLeft,
-      y: event.clientY - draggedElement.offsetTop
-    })
-    
+      y: event.clientY - draggedElement.offsetTop,
+    });
+
     setIsDragging(true);
 
     event.stopPropagation();
     event.preventDefault();
-  }
-  
+  };
+
   const handleMouseMove = (event: any) => {
-    if(!isDragging) return;
-    
+    if (!isDragging) return;
+
     setPosition({
       x: event.pageX - mouseRel.x,
-      y: event.pageY - mouseRel.y
-    })
+      y: event.pageY - mouseRel.y,
+    });
 
-    updateBlockPosition(block.id!, position.x, position.y)
+    updateBlockPosition(block.id!, position.x, position.y);
     setElementPosition();
+
     event.stopPropagation();
     event.preventDefault();
   };
 
   const setElementPosition = () => {
     const draggedElement = (blockRef.current as unknown) as HTMLElement;
-    draggedElement.style.top = (block.position.y) + "px";
-    draggedElement.style.left = (block.position.x) + "px";
-  }
+    draggedElement.style.top = block.position.y + "px";
+    draggedElement.style.left = block.position.x + "px";
+  };
 
   const handleMouseRelease = () => {
     setIsDragging(false);
-  }
+    setRightestNodeBlock();
+    setDeepestNodeBlock();
+  };
 
   return (
-    <div ref={blockRef} className={`node-block`} draggable="true" onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseUp={handleMouseRelease}>
+    <div
+      ref={blockRef}
+      className={`node-block`}
+      draggable="true"
+      onMouseDown={handleMouseDown}
+      onMouseMove={handleMouseMove}
+      onMouseUp={handleMouseRelease}
+    >
       <div className="node-block-header">
         <div className="node-block-header-title">{block.title}</div>
-        <div className="node-block-header-meta">...has {block.dialogNodes.length} dialog nodes</div>
+        <div className="node-block-header-meta">
+          ...has {block.dialogNodes.length} dialog nodes
+        </div>
       </div>
       <div className="node-block-body">
         <div className="node-block-body-description">{block.description}</div>

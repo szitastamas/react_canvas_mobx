@@ -4,7 +4,6 @@ import IDialogNode from "../interfaces/IDialogNode";
 import INodeBlock from "../interfaces/INodeBlock";
 import DialogNodeModel from "../models/DialogNodeModel";
 import { v4 } from "uuid";
-import { createContext } from "react";
 
 const initialState = [
     new NodeBlockModel("1", "Block One", "This is block one", [
@@ -19,7 +18,10 @@ export class NodeStore {
       initialState.forEach((block: NodeBlockModel) => this.addBlock(block))
   }
   @observable public blockRepository = new Map<string, INodeBlock>();
+  @observable public blocks: INodeBlock[] = initialState;
   @observable public selectedBlock: INodeBlock | null = null;
+  @observable deepestPosition: number = 0;
+  @observable rightestPosition: number = 0;
 
 
   @computed get allBlocks(){
@@ -86,6 +88,7 @@ export class NodeStore {
     return refCount;
   }
 
+  // Updating the block's position so that it can be rerendered on the right spot
   @action updateBlockPosition = (
     blockId: string, 
     newPosX: number, 
@@ -94,6 +97,17 @@ export class NodeStore {
       if(!block) return;
       block.position.x = newPosX;
       block.position.y = newPosY;
+  }
+
+  @action setDeepestNodeBlock = () => {
+    const deepestBlockPosition = this.allBlocks.map((block: INodeBlock) => block.position).map(pos => pos.y).sort((a,b) => b - a)[0]
+    console.log(deepestBlockPosition)
+    this.deepestPosition = this.allBlocks.find(block => block.position.y === deepestBlockPosition)!.position.height!;
+  }
+
+  @action setRightestNodeBlock = () => {
+    const rightestBlockPosition = this.allBlocks.map((block: INodeBlock) => block.position).sort((a,b) => b.x - a.x)[0]
+    this.rightestPosition =  this.allBlocks.find(block => block.position === rightestBlockPosition)!.position.width!;
   }
 
   @computed get nodeBlockCount() {

@@ -8,6 +8,6 @@ export default class NodeBlockModel implements INodeBlock {
         public title: string,
         public description: string,
         public dialogNodes: IDialogNode[],
-        public position: IPosition = { "x": 0, "y": 0 }
+        public position: IPosition = { "x": 0, "y": 0, "height": 300, "width": 250 }
     ){}
 }
