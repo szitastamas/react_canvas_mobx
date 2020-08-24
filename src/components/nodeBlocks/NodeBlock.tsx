@@ -6,7 +6,7 @@ import { observer } from "mobx-react-lite";
 
 const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
   const {
-    nodeStore: { getReferencesCount },
+    nodeStore: { getReferencesCount, updateBlockPosition },
   } = useContext(rootStore);
 
   const [position, setPosition] = useState({
@@ -23,18 +23,23 @@ const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
 
   const blockRef = useRef(null);
 
-  const handleDragStart = (event: React.DragEvent<HTMLElement>) => {
+  useEffect(() => {
+    calculatePosition()
+    console.log(block)
+  }, [block.position, updateBlockPosition])
+
+  const handleDragStart = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const draggedElement = (blockRef.current as unknown) as HTMLElement;
     setMouseRel({
-      x: event.pageX - draggedElement.offsetLeft,
-      y: event.pageY - draggedElement.offsetTop
+      x: event.clientX - draggedElement.offsetLeft,
+      y: event.clientY - draggedElement.offsetTop
     })
     
     setIsDragging(true);
 
-    setTimeout(()=>{
-      draggedElement.style.display = "none"
-    }, 0)
+    // setTimeout(()=>{
+    //   draggedElement.style.display = "none"
+    // }, 0)
 
     event.stopPropagation();
     // event.preventDefault();
@@ -47,13 +52,19 @@ const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
       x: event.pageX - mouseRel.x,
       y: event.pageY - mouseRel.y
     })
-    const draggedElement = (blockRef.current as unknown) as HTMLElement;
-    
-    draggedElement.style.top = (position.y) + "px";
-    draggedElement.style.left = (position.x) + "px";
+
+    updateBlockPosition(block.id!, position.x, position.y)
+    calculatePosition();
     event.stopPropagation();
     event.preventDefault();
   };
+
+  const calculatePosition = () => {
+    const draggedElement = (blockRef.current as unknown) as HTMLElement;
+    
+    draggedElement.style.top = (block.position.y) + "px";
+    draggedElement.style.left = (block.position.x) + "px";
+  }
 
   const closeDragging = () => {
     const draggedElement = (blockRef.current as unknown) as HTMLElement;
@@ -62,7 +73,7 @@ const NodeBlock: React.FC<{ block: INodeBlock }> = ({ block }) => {
   }
 
   return (
-    <div ref={blockRef} className={`node-block`} draggable="true" onDragStart={handleDragStart} onDrag={handleDrag} onDragEnd={closeDragging}>
+    <div ref={blockRef} className={`node-block`} draggable="true" onMouseDown={handleDragStart} onDrag={handleDrag} onDragEnd={closeDragging}>
       <div className="node-block-header">
         <div className="node-block-header-title">{block.title}</div>
         <div className="node-block-header-meta">...has {block.dialogNodes.length} dialog nodes</div>

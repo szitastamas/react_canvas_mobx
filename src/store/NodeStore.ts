@@ -39,7 +39,6 @@ export class NodeStore {
   // Getting one particular block from the map
   @action selectBlock = (id: string) => {
     const block = this.blockRepository.get(id);
-    console.log(block)
     if(!block) return;
     this.selectedBlock = block;
   };
@@ -88,10 +87,13 @@ export class NodeStore {
   }
 
   @action updateBlockPosition = (
-    block: HTMLElement, 
+    blockId: string, 
     newPosX: number, 
     newPosY: number) => {
-      
+      const block = this.blockRepository.get(blockId)
+      if(!block) return;
+      block.position.x = newPosX;
+      block.position.y = newPosY;
   }
 
   @computed get nodeBlockCount() {
