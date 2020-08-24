@@ -4,6 +4,8 @@ export default class DialogNodeModel implements IDialogNode {
   constructor(
     public id: string | number,
     public title: string,
-    public attachedDialogNodes: (string|number)[]
+    public blockId: string,
+    public parentDialogNode: string | null,
+    public nextDialogNodes: string[]
   ) {}
 }

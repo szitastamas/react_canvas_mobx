@@ -7,18 +7,18 @@ import { v4 } from "uuid";
 import { createContext } from "react";
 
 const initialState = [
-    new NodeBlockModel(1, "Block One", "This is block one", [
-        new DialogNodeModel(1, "Dialog Node One", []),
-        new DialogNodeModel(2, "Dialog Node Two", [1])
+    new NodeBlockModel("1", "Block One", "This is block one", [
+        new DialogNodeModel("1", "Dialog Node One", "1", null, []),
+        new DialogNodeModel("2", "Dialog Node Two", "1", null, ["1"])
     ]),
-    new NodeBlockModel(2, "Block Two", "This is block two", [])
+    new NodeBlockModel("2", "Block Two", "This is block two", [])
 ]
 
 export class NodeStore {
   constructor() {
       initialState.forEach((block: NodeBlockModel) => this.addBlock(block))
   }
-  @observable public blockRepository = new Map<string | number, INodeBlock>();
+  @observable public blockRepository = new Map<string, INodeBlock>();
   @observable public selectedBlock: INodeBlock | null = null;
 
 
@@ -32,12 +32,12 @@ export class NodeStore {
   };
 
   // Removing a complete block entry
-  @action deleteBlock = (id: string | number) => {
+  @action deleteBlock = (id: string) => {
     this.blockRepository.delete(id);
   };
 
   // Getting one particular block from the map
-  @action selectBlock = (id: string | number) => {
+  @action selectBlock = (id: string) => {
     const block = this.blockRepository.get(id);
     console.log(block)
     if(!block) return;
@@ -46,7 +46,7 @@ export class NodeStore {
 
   // Adding dialog chrildren to an existing block
   @action addDialogChildToBlock = (
-    blockId: string | number,
+    blockId: string,
     dialogNode: IDialogNode
   ) => {
     this.blockRepository.get(blockId)?.dialogNodes.push(dialogNode);
@@ -54,7 +54,7 @@ export class NodeStore {
 
   // Editing one dialog child of a certain block
   @action editDialogChild = (
-    blockId: string | number,
+    blockId: string,
     editedDialogNode: IDialogNode
   ) => {
     let toBeEditedNode = this.blockRepository
@@ -68,7 +68,7 @@ export class NodeStore {
 
   // Removing a dialog child from a certain block
   // Removing the block if the last child was deleted
-  @action removeDialogChild = (blockId: string | number, nodeId: string | number) => {
+  @action removeDialogChild = (blockId: string, nodeId: string) => {
     const block = this.blockRepository.get(blockId);
 
     if (!block) return;
@@ -82,8 +82,8 @@ export class NodeStore {
     block?.dialogNodes.splice(index, 1);
   };
 
-  @action getReferencesCount = (blockId: string | number | number) => {
-    const refCount = this.blockRepository.get(blockId)?.dialogNodes.reduce((acc: number, node: IDialogNode) => acc+node.attachedDialogNodes.length, 0)
+  @action getReferencesCount = (blockId: string) => {
+    const refCount = this.blockRepository.get(blockId)?.dialogNodes.reduce((acc: number, node: IDialogNode) => acc+node.nextDialogNodes.length, 0)
     return refCount;
   }
 
