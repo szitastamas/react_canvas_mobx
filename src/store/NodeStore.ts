@@ -87,9 +87,16 @@ export class NodeStore {
     return refCount;
   }
 
+  @action updateBlockPosition = (
+    block: HTMLElement, 
+    newPosX: number, 
+    newPosY: number) => {
+      
+  }
+
   @computed get nodeBlockCount() {
     return this.allBlocks.length;
   }
 }
 
-export default createContext(new NodeStore());
+export default NodeStore;

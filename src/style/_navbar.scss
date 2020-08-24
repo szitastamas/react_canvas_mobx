@@ -1,0 +1,21 @@
+.navbar{
+    text-align: right;
+    padding: .5rem 3rem;
+
+    &-list{
+
+        &-item{
+            text-decoration: none;
+            margin: 0 1rem;
+            border-bottom: 2px solid transparent;
+            transition: all 120ms ease-out;
+            padding: .2rem 0;
+            font-weight: 600;
+            color: darken(teal, 10);
+
+            &.active{
+                border-bottom: 2px solid teal;
+            }
+        }
+    }
+}

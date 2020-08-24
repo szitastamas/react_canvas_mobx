@@ -1,10 +1,10 @@
 import React, { useContext } from 'react'
-import nodeStore from '../../store/NodeStore'
+import rootStore from '../../store/rootStore'
 import INodeBlock from '../../interfaces/INodeBlock'
-import NodeBlock from './NodeBlock'
+import NodeBlock from '../nodeBlocks/NodeBlock'
 
 const Dashboard = () => {
-    const { allBlocks } = useContext(nodeStore);
+    const { nodeStore: { allBlocks } } = useContext(rootStore);
     return (
         <div id="dashboard">
             {allBlocks.map((block: INodeBlock) => <NodeBlock key={block.id} block={block} />)}

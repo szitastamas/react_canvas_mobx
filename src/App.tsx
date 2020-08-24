@@ -1,27 +1,28 @@
 import React, { useContext } from "react";
 import { BrowserRouter } from "react-router-dom";
-// import rootStore from "./store/rootStore";
-import Dashboard from "./components/nodeBlocks/Dashboard";
+import rootStore from "./store/rootStore";
+import Dashboard from "./components/layout/Dashboard";
 import { Switch, Route } from "react-router";
 import DialogDetails from "./components/nodeBlocks/DialogDetails";
-import { observer } from 'mobx-react-lite'
-import nodeStore from "./store/NodeStore";
+import { observer } from "mobx-react-lite";
+import Home from "./components/layout/Home";
+import Navbar from "./components/layout/Navbar";
 
 function App() {
-  const { nodeBlockCount } = useContext(nodeStore);
+  const { nodeBlockCount } = useContext(rootStore).nodeStore;
 
   return (
-    <div className="App">
-      <h2>We have {nodeBlockCount} blocks.</h2>
-      <hr />
-      <div className="container">
-        <BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <Navbar />
+        <div className="container">
           <Switch>
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/" component={Home} />
+            <Route path="/dashboard" component={Dashboard} />
             <Route path="/blocks/:blockId" component={DialogDetails} />
           </Switch>
-        </BrowserRouter>
-      </div>
+        </div>
+      </BrowserRouter>
     </div>
   );
 }
