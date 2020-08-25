@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useContext, useState } from "react";
 import INodeBlock from "../../interfaces/INodeBlock";
-import rootStore from "../../store/rootStore";
+import { RootStoreContext } from "../../store/rootStore";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react-lite";
 
@@ -14,7 +14,7 @@ const NodeBlock: React.FC<IProps> = ({
 }) => {
   const {
     nodeStore: { getReferencesCount, updateBlockPosition, setDeepestNodeBlock, setRightestNodeBlock },
-  } = useContext(rootStore);
+  } = useContext(RootStoreContext);
 
   const [position, setPosition] = useState({
     x: block.position.x,

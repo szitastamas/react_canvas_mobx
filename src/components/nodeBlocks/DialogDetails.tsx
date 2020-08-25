@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from "react";
 import { useParams } from "react-router";
-import rootStore from "../../store/rootStore";
+import { RootStoreContext } from "../../store/rootStore";
 import { observer } from "mobx-react-lite";
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const DialogDetails = () => {
 
   const {
     nodeStore: { selectBlock, selectedBlock },
-  } = useContext(rootStore);
+  } = useContext(RootStoreContext);
 
   useEffect(() => {
     if (!selectedBlock || selectedBlock.id !== blockId) {

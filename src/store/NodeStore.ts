@@ -4,6 +4,7 @@ import IDialogNode from "../interfaces/IDialogNode";
 import INodeBlock from "../interfaces/INodeBlock";
 import DialogNodeModel from "../models/DialogNodeModel";
 import { v4 } from "uuid";
+import { RootStore } from "./rootStore";
 
 const initialState = [
     new NodeBlockModel("1", "Block One", "This is block one", [
@@ -14,7 +15,7 @@ const initialState = [
 ]
 
 export class NodeStore {
-  constructor() {
+  constructor(public rootStore: RootStore) {
       initialState.forEach((block: NodeBlockModel) => this.addBlock(block))
   }
   @observable public blockRepository = new Map<string, INodeBlock>();
